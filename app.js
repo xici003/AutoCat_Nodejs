@@ -2,6 +2,9 @@ const express = require('express');
 const morgan = require('morgan');
 
 const playerRouter = require('./routes/playerRoutes');
+const carBodyRouter = require('./routes/carBodyRoutes');
+const weaponRouter = require('./routes/weaponRoutes');
+const wheelRouter = require('./routes/wheelRoutes');
 
 const app = express();
 
@@ -28,6 +31,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/v1/characters', playerRouter);
+app.use('/api/v1/players', playerRouter);
+app.use('/api/v1/carbodys', carBodyRouter);
+app.use('/api/v1/weapons', weaponRouter);
+app.use('/api/v1/wheels', wheelRouter);
 
 module.exports = app;

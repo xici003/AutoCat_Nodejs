@@ -1,15 +1,50 @@
-const fs = require('fs');
+const Player = require('../models/playerModel');
 
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
+exports.getAllPlayer = async (req, res) => {
+  const players = await Player.find();
 
-exports.getAll = (req, res) => {
+  //Send response
   res.status(200).json({
     status: 'success',
-    results: tours.length,
+    results: players.length,
     data: {
-      tours,
+      players,
     },
   });
+};
+
+exports.getPlayer = async (req, res) => {
+  try {
+    const player = await Player.findById(req.params.id);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        player: player,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: 'No found player with ID',
+    });
+  }
+};
+
+exports.createPlayer = async (req, res) => {
+  try {
+    const newPlayer = await Player.create(req.body);
+
+    res.status(201).json({
+      status: 'success',
+      data: {
+        player: newPlayer,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: err,
+    });
+  }
 };
