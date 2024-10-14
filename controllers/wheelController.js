@@ -1,6 +1,7 @@
 const Wheel = require('../models/wheelModel');
+const catchAsync = require('../utils/catchAsync');
 
-exports.getAllWheel = async (req, res) => {
+exports.getAllWheel = catchAsync(async (req, res) => {
   const wheels = await Wheel.find();
 
   //Send response
@@ -11,4 +12,4 @@ exports.getAllWheel = async (req, res) => {
       wheels,
     },
   });
-};
+});

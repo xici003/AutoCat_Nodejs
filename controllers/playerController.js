@@ -1,6 +1,8 @@
 const Player = require('../models/playerModel');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
-exports.getAllPlayer = async (req, res) => {
+exports.getAllPlayer = catchAsync(async (req, res) => {
   const players = await Player.find();
 
   //Send response
@@ -11,40 +13,29 @@ exports.getAllPlayer = async (req, res) => {
       players,
     },
   });
-};
+});
 
-exports.getPlayer = async (req, res) => {
-  try {
-    const player = await Player.findById(req.params.id);
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        player: player,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'No found player with ID',
-    });
+exports.getPlayer = catchAsync(async (req, res, next) => {
+  const player = await Player.findById(req.params.id);
+  if (!player) {
+    return next(new AppError('No found player with ID', 404));
   }
-};
 
-exports.createPlayer = async (req, res) => {
-  try {
-    const newPlayer = await Player.create(req.body);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      player: player,
+    },
+  });
+});
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        player: newPlayer,
-      },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+exports.createPlayer = catchAsync(async (req, res) => {
+  const newPlayer = await Player.create(req.body);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      player: newPlayer,
+    },
+  });
+});

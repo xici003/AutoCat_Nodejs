@@ -1,6 +1,7 @@
 const Weapon = require('../models/weaponModel');
+const catchAsync = require('../utils/catchAsync');
 
-exports.getAllWeapon = async (req, res) => {
+exports.getAllWeapon = catchAsync(async (req, res) => {
   const weapons = await Weapon.find();
 
   //Send response
@@ -11,4 +12,4 @@ exports.getAllWeapon = async (req, res) => {
       weapons,
     },
   });
-};
+});
